@@ -156,22 +156,14 @@ class IG_API:
 
     def get_watchlist(
         self, 
-        verbose: int = None
         ) -> dict:
         """
         Print and return dict (r.json()) of Watchlist.
 
-        ---
-        Args:
-            * verbose (int, default 0): more printing for earlier viewing of 
-                results in some scenarios
         ---    
         Returns:
             * dict: watchlist
         """
-        if verbose is None:
-            verbose = self.verbose
-        
         # watchlist: variables
         url = f'{self.url_base}/watchlists'
         header = self.header_base
@@ -183,13 +175,12 @@ class IG_API:
         )
 
         # watchlist: response
-        return output_request(r, verbose)
+        return output_request(r, self.verbose)
 
 
     def get_market_search(
         self, 
         searchTerm: str = None, 
-        verbose: int = None
         ) -> dict:
         """
         Get list (value of first key) of available assets having match with searchTerm,
@@ -198,17 +189,13 @@ class IG_API:
         ---
         Args:
             * searchTerm (str, default None): str used in search
-            * verbose (int, default 0): more printing for earlier viewing of 
-                results in some scenarios
+
         ---
         Returns:
             * dict (1 key, then list with each elem being a dict of that asset's info) 
                 * can find epic of desired instrument in results 
                 (but first find correct asset in list of results)
         """
-        if verbose is None:
-            verbose = self.verbose
-        
         # market_search: variables
         url = f'{self.url_base}/markets?searchTerm={searchTerm}'
         header = self.header_base
@@ -220,7 +207,7 @@ class IG_API:
         )
 
         # market_search: response
-        return output_request(r, verbose)
+        return output_request(r, self.verbose)
 
 
     def find_asset_epic_or_info(
@@ -279,11 +266,8 @@ class IG_API:
             instrumentName = d['instrumentName']
             expiry = d['expiry']
             assets[asset_name]['epic'] = self.find_asset_epic_or_info(
-                self,
                 self.get_market_search(
-                    self, 
                     asset_name, 
-                    verbose=0
                 ),
                 instrumentName,
                 expiry,
@@ -334,10 +318,11 @@ class IG_API:
                 * defaults to None
         ---
         Notes to startDate/endDate:
-            * the time portions must ALWAYS be different from one another, NEVER the same
-            * to get data for a full day use the hours 00:00:00-23:59:59
-            * the time rounds DOWNWARDS 
-                * i.e. if getting HOURLY data final value would be 23:00:00 
+            * if the time portions are the SAME then data is fetched using ALL the 24 hours
+            in EVERY single day avaialble ('weekdays' parameter is IGNORED)
+            * if the time portions are DIFFERENT from one another, then the timeInterval is applied 
+            * during the timeInterval technique, note that the time rounds DOWNWARDS 
+                * i.e. if getting HOURLY data from 00:00:00-23:59:59 final value would be 23:00:00 
                 instead of: 23:59:59 OR 00:00:00 (which would be midnight the NEXT day, 
                 but dates are INCLUSIVE so midnight the next day is technically 
                 out of date range)
@@ -355,6 +340,10 @@ class IG_API:
                     ends and remainingAllowance field is reset
                 * instrumentType (str): e.g. CURRENCIES
         """
+        # initialize flag at 0
+        # i.e. not using and timeInterval (later updated if necessary)
+        timeIntervalFlag = 0
+        
         # rangeType selection
         if rangeType == 'numPoints':
             
@@ -369,13 +358,26 @@ class IG_API:
             dateStart, timeIntervalStart = startDate.split()
             dateEnd, timeIntervalEnd = endDate.split()
             
-            # create date range taking into account 'weekdays' input
-            dateRange = pd.date_range(dateStart, dateEnd)
-            dateRange = list(filter(lambda x: x.weekday() in weekdays, dateRange))
-            dateRange = [x.strftime('%Y-%m-%d') for x in dateRange]
-            
-            # number of times to loop requests.get for this rangeType method
-            n = len(dateRange)
+            # condition to exclude time intervals
+            # gets all data points possible
+            # ignores 'weekdays' selection
+            if timeIntervalStart == timeIntervalEnd:
+                url = f'{self.url_base}/prices/{epic}/{resolution}/{startDate}/{endDate}'
+                
+                # number of times to loop requests.get for this rangeType method
+                n = 1
+                
+            else:
+                # activate flag
+                timeIntervalFlag = 1
+                
+                # create date range taking into account 'weekdays' input
+                dateRange = pd.date_range(dateStart, dateEnd)
+                dateRange = list(filter(lambda x: x.weekday() in weekdays, dateRange))
+                dateRange = [x.strftime('%Y-%m-%d') for x in dateRange]
+                
+                # number of times to loop requests.get for this rangeType method
+                n = len(dateRange)
             
         
         header = self.header_base.copy()
@@ -386,7 +388,7 @@ class IG_API:
 
         for i in range(n):
             
-            if rangeType == 'dates':
+            if timeIntervalFlag:
                 startDate = f'{dateRange[i]} {timeIntervalStart}'
                 endDate = f'{dateRange[i]} {timeIntervalEnd}'
                 url = f'{self.url_base}/prices/{epic}/{resolution}/{startDate}/{endDate}'
@@ -517,10 +519,11 @@ class IG_API:
                 * defaults to None
         ---
         Notes to startDate/endDate:
-            * the time portions must ALWAYS be different from one another, NEVER the same
-            * to get data for a full day use the hours 00:00:00-23:59:59
-            * the time rounds DOWNWARDS 
-                * i.e. if getting HOURLY data final value would be 23:00:00 
+            * if the time portions are the SAME then data is fetched using ALL the 24 hours
+            in EVERY single day avaialble ('weekdays' parameter is IGNORED)
+            * if the time portions are DIFFERENT from one another, then the timeInterval is applied 
+            * during the timeInterval technique, note that the time rounds DOWNWARDS 
+                * i.e. if getting HOURLY data from 00:00:00-23:59:59 final value would be 23:00:00 
                 instead of: 23:59:59 OR 00:00:00 (which would be midnight the NEXT day, 
                 but dates are INCLUSIVE so midnight the next day is technically 
                 out of date range)
@@ -544,8 +547,7 @@ class IG_API:
         for asset in assets:
             epic = assets[asset]['epic']
 
-            prices, allowance, instrumentType = self.get_prices_single_asset(
-                self, 
+            prices, allowance, instrumentType = self.get_prices_single_asset( 
                 epic, 
                 resolution, 
                 rangeType, 
