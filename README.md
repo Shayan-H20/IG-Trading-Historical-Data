@@ -41,6 +41,25 @@ The difference between this package and others found so far is the following:
 
 # Quickstart
 
+Install using pip:
 
+`pip install ig_trading_historical_data`
+
+Format of the 'assets' dictionary with example data:
+```python
+assets = {
+    
+    'GBPUSD Forward': {  # asset name in normal language (without slashes)
+        'instrumentName': 'GBP/USD Forward',  # asset name in EXACT way seen on 
+                                              # IG web platform (with slashes if relevant)
+        'expiry': 'MAR-24'  # either 'DFB' or the expiration date
+    },
+    
+    'Tesla': {  # another asset example
+        'instrumentName': 'Tesla Motors Inc (All Sessions)',  
+        'expiry': 'DFB'
+    },
+}
+```
 
 
