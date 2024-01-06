@@ -4,6 +4,7 @@
 import requests
 from pprint import pprint
 import pandas as pd
+import time
 
 
 # ---------------------------------------------------------------
@@ -394,11 +395,32 @@ class IG_API:
                 url = f'{self.url_base}/prices/{epic}/{resolution}/{startDate}/{endDate}'
             
             # prices: GET request
+            # every request/loopIteration is 1 call to the API
+            # we have limit of max 60 or 30 [unclear] per minute
+            # need to sleep this section so that 1 call takes minimum 1s [for limit of 60 per minute] 
+            # or 2s [for limit of 30 per minute]
+            # in reality, so far 3s sleep throws no error, whereas 1s or 2s still gives error
+            timerStart = time.time()
+            
             r = requests.get(
                 url=url,
                 headers=header
             )
-
+            
+            timerEnd = time.time()
+            
+            timeTaken = timerEnd - timerStart
+            print(f'{timeTaken:.2f} seconds to run loop {i}/{n}')
+            
+            # if NOT a single API call
+            if n != 1:
+                # number of seconds to sleep between each API call to avoid exceeding unknown limit
+                secondsForceSleep = 3.0  
+                
+                # sleep if time taken for request is less than value of secondsForceSleep
+                if timeTaken < secondsForceSleep:
+                    time.sleep(secondsForceSleep - timeTaken)
+            
             # store JSON result
             res = r.json()
 
