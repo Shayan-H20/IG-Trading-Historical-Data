@@ -5,37 +5,34 @@ from ig_trading_historical_data import IG_API
 import user_info
 from pprint import pprint
 
+
 # ---------------------------------------------------------------
 # USER INPUT
 # ---------------------------------------------------------------
 DEMO = 1
 
+# format of the 'assets' dict example:
 assets = {
-    'GBPUSD Fwd': {
-        'instrumentName': 'GBP/USD Forward',
-        'expiry': 'MAR-24'
+    
+    'GBPUSD Forward': {  # asset name in normal language (without slashes)
+        'instrumentName': 'GBP/USD Forward',  # asset name in EXACT way seen on 
+                                              # IG web platform (with slashes if relevant)
+        'expiry': 'MAR-24'  # either 'DFB' or the expiration date
     },
-    'EURUSD': {
-        'instrumentName': 'EUR/USD',
-        'expiry': 'DFB'
-    },
-    'US 500': {
-        'instrumentName': 'US 500',
-        'expiry': 'DFB'
-    },
-    'Tesla': {
-        'instrumentName': 'Tesla Motors Inc (All Sessions)',
+    
+    'Tesla': {  # another asset example
+        'instrumentName': 'Tesla Motors Inc (All Sessions)',  
         'expiry': 'DFB'
     },
 }
 
 # historical data details
 resolution = 'HOUR'  # price resolution (SECOND, MINUTE, MINUTE_2, MINUTE_3, MINUTE_5, MINUTE_10, MINUTE_15, MINUTE_30, HOUR, HOUR_2, HOUR_3, HOUR_4, DAY, WEEK, MONTH)
-rangeType = 'numPoints'  # 'numPoints' or 'dates'
+rangeType = 'dates'  # 'numPoints' or 'dates'
 numPoints = 3
-startDate = '2023-11-06 00:00:00'  # yyyy-MM-dd HH:mm:ss (inclusive)
-endDate = '2023-12-29 00:00:00'  # yyyy-MM-dd HH:mm:ss (inclusive)
-weekdays = (0, 1, 2, 3, 4)  # 0: Mon, 6: Sun
+startDate = '2023-10-01 10:00:00'  # yyyy-MM-dd HH:mm:ss (inclusive)
+endDate = '2023-10-31 13:00:00'  # yyyy-MM-dd HH:mm:ss (inclusive)
+weekdays = (0, 1, 2)  # 0: Mon, 6: Sun (deactivated in time portion above is equal) !!! ADD THIS POINT IN DOCSTRINGS
 """API HISTORICAL DATA LIMITS (INDICATION)
 ------------------------------------------
 Resolution	    Days
@@ -55,10 +52,11 @@ Resolution	    Days
 ------------------------------------------
 """
 
-# loaded variables
+# loaded user information
 username = user_info.username_demo if DEMO else user_info.username
 pw = user_info.pw_demo if DEMO else user_info.pw
 api_key = user_info.api_key_demo if DEMO else user_info.api_key
+
 
 # ---------------------------------------------------------------
 # API USAGE
@@ -86,32 +84,22 @@ pprint(allowance)
 # example outputs
 pprint(assets.keys())
 
-pprint(assets['GBPUSD Fwd']['instrumentName'])
-pprint(assets['EURUSD']['instrumentName'])
+pprint(assets['GBPUSD Forward'].keys())
+
+pprint(assets['GBPUSD Forward']['instrumentName'])
 pprint(assets['Tesla']['instrumentName'])
-pprint(assets['US 500']['instrumentName'])
 
-pprint(assets['GBPUSD Fwd']['expiry'])
-pprint(assets['EURUSD']['expiry'])
+pprint(assets['GBPUSD Forward']['expiry'])
 pprint(assets['Tesla']['expiry'])
-pprint(assets['US 500']['expiry'])
 
-pprint(assets['GBPUSD Fwd']['epic'])
-pprint(assets['EURUSD']['epic'])
+pprint(assets['GBPUSD Forward']['epic'])
 pprint(assets['Tesla']['epic'])
-pprint(assets['US 500']['epic'])
 
-pprint(assets['GBPUSD Fwd']['instrumentType'])
-pprint(assets['EURUSD']['instrumentType'])
+pprint(assets['GBPUSD Forward']['instrumentType'])
 pprint(assets['Tesla']['instrumentType'])
-pprint(assets['US 500']['instrumentType'])
 
-pprint(assets['GBPUSD Fwd']['prices'])
-pprint(assets['EURUSD']['prices'])
+pprint(assets['GBPUSD Forward']['prices'])
 pprint(assets['Tesla']['prices'])
-pprint(assets['US 500']['prices'])
 
-pprint(assets['GBPUSD Fwd']['prices'][['closePxMid', 'lastTradedVolume']])
-pprint(assets['EURUSD']['prices'][['closePxMid', 'lastTradedVolume']])
+pprint(assets['GBPUSD Forward']['prices'][['closePxMid', 'lastTradedVolume']])
 pprint(assets['Tesla']['prices'][['closePxMid', 'lastTradedVolume']])
-pprint(assets['US 500']['prices'][['closePxMid', 'lastTradedVolume']])
