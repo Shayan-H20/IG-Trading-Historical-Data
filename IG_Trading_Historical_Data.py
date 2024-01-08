@@ -410,7 +410,7 @@ class IG_API:
             timerEnd = time.time()
             
             timeTaken = timerEnd - timerStart
-            print(f'{timeTaken:.2f} seconds to run loop {i}/{n}')
+            print(f'{timeTaken:.2f} seconds for asset {epic} to run loop {i}/{n}')
             
             # if NOT a single API call
             if n != 1:
