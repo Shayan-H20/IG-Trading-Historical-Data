@@ -132,7 +132,7 @@ class IG_API:
             print(f'STATUS CODE: {r.status_code}')
             print(r.content)
             
-            raise Exception('Could NOT log in')
+            raise ValueError(r.content)
 
         # retrieve tokens that MUST BE PASSED AS HEADERS to ALL subsequent API requests
         # [both tokens valid for 6H?]; get extended up to max of 72H while they are in use
@@ -369,7 +369,8 @@ class IG_API:
                 n = 1
                 
             else:
-                # activate flag
+                # activate flag ONLY if 'dates' selected and time intervals DIFFER
+                # 'weekdays' input only taken into account HERE
                 timeIntervalFlag = 1
                 
                 # create date range taking into account 'weekdays' input
@@ -410,7 +411,7 @@ class IG_API:
             timerEnd = time.time()
             
             timeTaken = timerEnd - timerStart
-            print(f'{timeTaken:.2f} seconds for asset {epic} to run loop {i}/{n}')
+            print(f'{timeTaken:.2f} seconds for asset {epic} to run day {i+1}/{n}')
             
             # if NOT a single API call
             if n != 1:
