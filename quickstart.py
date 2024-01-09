@@ -4,6 +4,9 @@
 from ig_trading_historical_data import IG_API
 import user_info
 from pprint import pprint
+import pandas as pd  # (optional) solely to see more DataFrame rows
+
+pd.set_option('display.max_rows', 500)  # (optional) solely to see more DataFrame rows
 
 
 # ---------------------------------------------------------------
@@ -27,12 +30,13 @@ assets = {
 }
 
 # historical data details
-resolution = 'HOUR'  # price resolution (SECOND, MINUTE, MINUTE_2, MINUTE_3, MINUTE_5, MINUTE_10, MINUTE_15, MINUTE_30, HOUR, HOUR_2, HOUR_3, HOUR_4, DAY, WEEK, MONTH)
-rangeType = 'dates'  # 'numPoints' or 'dates'
-numPoints = 3
-startDate = '2023-10-01 10:00:00'  # yyyy-MM-dd HH:mm:ss (inclusive)
-endDate = '2023-10-31 13:00:00'  # yyyy-MM-dd HH:mm:ss (inclusive)
-weekdays = (0, 1, 2)  # 0: Mon, 6: Sun (deactivated in time portion above is equal) !!! ADD THIS POINT IN DOCSTRINGS
+resolution = 'MINUTE_3'  # price resolution (SECOND, MINUTE, MINUTE_2, MINUTE_3, MINUTE_5, MINUTE_10, MINUTE_15, MINUTE_30, HOUR, HOUR_2, HOUR_3, HOUR_4, DAY, WEEK, MONTH)
+rangeType = 'numPoints'  # 'numPoints' or 'dates'
+numPoints = 1
+startDate = '2023-10-25 00:00:00'  # yyyy-MM-dd HH:mm:ss (inclusive dates and times)
+endDate = '2023-11-28 00:00:00'  # yyyy-MM-dd HH:mm:ss (inclusive dates and times)
+weekdays = (0, 1, 2, 3, 4, 5)  # 0: Mon, 6: Sun (deactivated in time portion above is equal) 
+# !!! ^^^ ADD THIS POINT IN DOCSTRINGS
 """API HISTORICAL DATA LIMITS (INDICATION)
 ------------------------------------------
 Resolution	    Days
