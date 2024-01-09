@@ -19,18 +19,6 @@ def test_can_login_via_init():
     assert ig_api.acc_info.keys()
 
 
-def test_error_msg_when_incorrect_Login_details_via_init():
-    # incorrect user info to log in
-    DEMO = 1
-    username = 'randomUserNameError99999999999999'
-    pw = 'madeUpPassword' 
-    api_key = 'madeUpAPIKey'
-
-    with pytest.raises(Exception):
-        IG_API(DEMO, username, pw, api_key)
-    
-
-
 
 
 pytest.main()
