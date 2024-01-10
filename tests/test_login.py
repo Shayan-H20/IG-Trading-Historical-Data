@@ -18,7 +18,7 @@ class TestLogin:
 
 
     @responses.activate
-    def test_can_login_demo_via_init(self):
+    def test_login_demo_via_init(self):
         
         with open("tests/data/mock_acc_info.json", "r") as f:
             mock_response_json = json.load(f)
