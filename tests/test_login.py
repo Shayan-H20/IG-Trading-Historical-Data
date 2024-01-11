@@ -1,4 +1,6 @@
 from ig_trading_historical_data import IG_API
+import tests.data.mock_user_info_demo as muid
+
 import responses
 import json
 
@@ -8,15 +10,7 @@ import json
 
 class TestLogin:
     
-    # initialize class variables
-    mock_user_info_demo = {
-        "DEMO": 1,
-        "username": "test_username",
-        "pw": "test_pw",
-        "api_key": "test_api_key",
-    }
-
-
+    
     @responses.activate
     def test_login_demo_via_init(self):
         
@@ -37,7 +31,7 @@ class TestLogin:
             headers=mock_response_headers,
         )
         
-        ig_api = IG_API(**self.mock_user_info_demo)
+        ig_api = IG_API(**muid.mock_user_info_demo)
         
         assert ig_api.acc_info['accounts'][0]['accountName'] == mock_response_json['accounts'][0]['accountName']
         assert ig_api.acc_info['accounts'][1]['accountName'] == mock_response_json['accounts'][1]['accountName']
