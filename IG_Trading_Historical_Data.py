@@ -8,44 +8,6 @@ import time
 
 
 # ------------------------------------------------------------------
-# verbose output support function (TO BE REMOVED IN FUTURE VERSION)
-# ------------------------------------------------------------------
-def output_request(
-    r, 
-    verbose: int = 0
-    ) -> dict:
-    """
-    This support function provides increased clarity if errors occur, 
-    OR displays a successful result and its associated return value if verbose=1.
-    It is used in other API methods.
-
-    ---
-    Args:
-        * r: output from requests.get(...)
-        * verbose (int, default 0): 
-            * 1: print Successful and pprint return value
-            * 0: suppress prints when Successful
-    ---
-    Returns:
-        * dict: r.json()
-    """
-    if r.status_code == 200:
-        if verbose:
-            print('----------------------')
-            print('Successful')
-            print('----------------------')
-            pprint(r.json()) 
-    else:
-        print('----------------------')
-        print('ERROR OCCURED')
-        print('----------------------')
-        print(f'STATUS CODE: {r.status_code}')
-        print(r.content)
-    
-    return r.json()
-
-
-# ------------------------------------------------------------------
 # API class definition
 # ------------------------------------------------------------------
 class IG_API:
@@ -55,7 +17,6 @@ class IG_API:
         username: str, 
         pw: str, 
         api_key: str, 
-        verbose: int = 0
         ) -> None:
         """
         Log into the IG REST API.
@@ -68,8 +29,6 @@ class IG_API:
             * username (str): username
             * pw (str): password
             * api_key(str): API key
-            * verbose (int, default 0): more printing for earlier viewing of 
-                results in some scenarios
         ---
         Raises:
             * Exception: if status_code != 200 (i.e. could not log in)
@@ -90,7 +49,6 @@ class IG_API:
         self.username = username
         self.pw = pw
         self.api_key = api_key
-        self.verbose = verbose
         
         # determine correct URL (API gateway location link)
         self.url_base = 'https://' + 'demo-'*DEMO + 'api.ig.com/gateway/deal'
@@ -123,8 +81,6 @@ class IG_API:
             print('----------------------')
             print('Successfully logged in')
             print('----------------------')
-            if verbose:
-                pprint(self.acc_info) 
         else:
             print('----------------------')
             print('ERROR OCCURED')
@@ -176,7 +132,7 @@ class IG_API:
         )
 
         # watchlist: response
-        return output_request(r, self.verbose)  # !!! DELETE + remove output_request func
+        return r.json()
 
 
     def get_market_search(
@@ -208,7 +164,7 @@ class IG_API:
         )
 
         # market_search: response
-        return output_request(r, self.verbose)  # !!! DELETE + remove output_request func
+        return r.json()
 
 
     def find_asset_epic_or_info(
@@ -594,11 +550,3 @@ class IG_API:
             assets[asset]['instrumentType'] = instrumentType
             
         return assets, allowance
-
-
-# EVERYTHING ABOVE THIS POINT IS SUFFICIENT TO:
-#   LOG IN
-#   GATHER HISTORICAL PRICING INFO FOR ASSETS (INCLUDING THEIR EPICS)
-
-
-

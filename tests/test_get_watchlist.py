@@ -30,7 +30,6 @@ class TestGetWatchlist:
         # set mock attributes
         ig_api.url_base = muid.mock_url_base
         ig_api.header_base = muid.mock_header_base
-        ig_api.verbose = 0
 
 
         """ test .get_watchlist() """
