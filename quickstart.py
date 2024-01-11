@@ -1,20 +1,16 @@
-# ---------------------------------------------------------------
 # import packages
-# ---------------------------------------------------------------
 from ig_trading_historical_data import IG_API
 import user_info
-from pprint import pprint
-import pandas as pd  # (optional) solely to see more DataFrame rows
-
-pd.set_option('display.max_rows', 500)  # (optional) solely to see more DataFrame rows
+from pprint import pprint  # for nicer dictionary printing
 
 
-# ---------------------------------------------------------------
-# USER INPUT
-# ---------------------------------------------------------------
+# user input
 DEMO = 1
+username = user_info.username
+pw = user_info.pw
+api_key = user_info.api_key
 
-# format of the 'assets' dict example:
+# format of the 'assets' dictionary with example data:
 assets = {
     
     'GBPUSD Forward': {  # asset name in normal language (without slashes)
@@ -56,10 +52,6 @@ Resolution	    Days
 ------------------------------------------
 """
 
-# loaded user information
-username = user_info.username_demo if DEMO else user_info.username
-pw = user_info.pw_demo if DEMO else user_info.pw
-api_key = user_info.api_key_demo if DEMO else user_info.api_key
 
 
 # ---------------------------------------------------------------

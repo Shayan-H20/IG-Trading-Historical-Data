@@ -3,6 +3,8 @@ A Python wrapper for extracting historical data in a quota-efficient way from IG
 ### Slightly more detailed description
 This is a quota-efficient method of extracting data as can extract data between the hours of for example 13:00-16:00 on specified days of the week. This is instead of the default action of gathering all 24H of data for every single day of the week (given availability) which consumes increased quota allowance.
 
+*- Quickstart Guide Further Below -*
+
 ### Output Format
 
 Data outputted is in the form of a *pandas.DataFrame* with the following columns:
@@ -38,7 +40,7 @@ The difference between this package and others found so far is the following:
 > * We are interested only in gathering data for Wednesdays and Fridays
 > * We are also interested only in data between the hours of 13:00-16:00
 > * We want HOURLY data during this time period and days from date X to date Y
-
+> ---
 > * Using this package we can get exactly what we want (conserving significant amounts of quota)
 > * Using other packages (found so far), you would get data for EVERY day of the week and EVERY hour of the day (where data is available) between dates X and Y
 
@@ -46,29 +48,21 @@ The difference between this package and others found so far is the following:
 
 Install using pip:
 
-`pip install ig_trading_historical_data`
-
-Prepare a 'user_info.py' file in your projects directory with the following code:
-```python
-
+```
+pip install ig_trading_historical_data
 ```
 
+Prepare a 'user_info.py' file (storage of sensitive information) in your projects directory with the following code:
 
-Format of the 'assets' dictionary with example data:
 ```python
-assets = {
-    
-    'GBPUSD Forward': {  # asset name in normal language (without slashes)
-        'instrumentName': 'GBP/USD Forward',  # asset name in EXACT way seen on 
-                                              # IG web platform (with slashes if relevant)
-        'expiry': 'MAR-24'  # either 'DFB' or the expiration date
-    },
-    
-    'Tesla': {  # another asset example
-        'instrumentName': 'Tesla Motors Inc (All Sessions)',  
-        'expiry': 'DFB'
-    },
-}
+# DEMO ACCOUNT DETAILS
+username = 'example username'
+pw = 'example pw'
+api_key = 'example api key'
 ```
 
+Create your main file (i.e. 'quickstart.py') and use the following code:
 
+```python
+<!-- include: quickstart.py -->
+```
