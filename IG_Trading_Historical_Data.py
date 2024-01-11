@@ -176,7 +176,7 @@ class IG_API:
         )
 
         # watchlist: response
-        return output_request(r, self.verbose)
+        return output_request(r, self.verbose)  # !!! DELETE + remove output_request func
 
 
     def get_market_search(
@@ -208,7 +208,7 @@ class IG_API:
         )
 
         # market_search: response
-        return output_request(r, self.verbose)
+        return output_request(r, self.verbose)  # !!! DELETE + remove output_request func
 
 
     def find_asset_epic_or_info(
@@ -306,22 +306,27 @@ class IG_API:
             * startDate (str, opt. depending on rangeType): 
                 * yyyy-MM-dd HH:mm:ss (inclusive)
                 * the time portion indicates timeIntervalStart
+                * see full description on how to use this below this 'Args' block
                 * defaults to None
             * endDate (str, opt. depending on rangeType): 
                 * yyyy-MM-dd HH:mm:ss (inclusive)
                 * the time portion indicates timeIntervalEnd
+                * see full description on how to use this below this 'Args' block
                 * defaults to None
             * weekdays (tup[int], opt.): 
                 * which days of the week to get data for (0: Mon, 6: Sun)
                 * defaults to all days of the week (0, 1, 2, 3, 4, 5, 6)
+                * NOTE: this is only applied to the code when the time portion
+                of the date range is different
             * numPoints (int, opt. depending on rangeType): 
                 * get last numPoints data points
                 * defaults to None
         ---
         Notes to startDate/endDate:
-            * if the time portions are the SAME then data is fetched using ALL the 24 hours
-            in EVERY single day avaialble ('weekdays' parameter is IGNORED)
-            * if the time portions are DIFFERENT from one another, then the timeInterval is applied 
+            * if the time portions are the SAME (00:00:00) then data is fetched using ALL the 24 hours
+            in EVERY single day available ('weekdays' parameter is IGNORED)
+            * if the time portions are DIFFERENT from one another, then the timeInterval and 'weekdays' 
+            parameter is applied 
             * during the timeInterval technique, note that the time rounds DOWNWARDS 
                 * i.e. if getting HOURLY data from 00:00:00-23:59:59 final value would be 23:00:00 
                 instead of: 23:59:59 OR 00:00:00 (which would be midnight the NEXT day, 
@@ -529,22 +534,27 @@ class IG_API:
             * startDate (str, opt. depending on rangeType): 
                 * yyyy-MM-dd HH:mm:ss (inclusive)
                 * the time portion indicates timeIntervalStart
+                * see full description on how to use this below this 'Args' block
                 * defaults to None
             * endDate (str, opt. depending on rangeType): 
                 * yyyy-MM-dd HH:mm:ss (inclusive)
                 * the time portion indicates timeIntervalEnd
+                * see full description on how to use this below this 'Args' block
                 * defaults to None
             * weekdays (tup[int], opt.): 
                 * which days of the week to get data for (0: Mon, 6: Sun)
                 * defaults to all days of the week (0, 1, 2, 3, 4, 5, 6)
+                * NOTE: this is only applied to the code when the time portion
+                of the date range is different
             * numPoints (int, opt. depending on rangeType): 
                 * get last numPoints data points
                 * defaults to None
         ---
         Notes to startDate/endDate:
-            * if the time portions are the SAME then data is fetched using ALL the 24 hours
-            in EVERY single day avaialble ('weekdays' parameter is IGNORED)
-            * if the time portions are DIFFERENT from one another, then the timeInterval is applied 
+            * if the time portions are the SAME (00:00:00) then data is fetched using ALL the 24 hours
+            in EVERY single day available ('weekdays' parameter is IGNORED)
+            * if the time portions are DIFFERENT from one another, then the timeInterval and 'weekdays' 
+            parameter is applied 
             * during the timeInterval technique, note that the time rounds DOWNWARDS 
                 * i.e. if getting HOURLY data from 00:00:00-23:59:59 final value would be 23:00:00 
                 instead of: 23:59:59 OR 00:00:00 (which would be midnight the NEXT day, 

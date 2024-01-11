@@ -35,8 +35,8 @@ rangeType = 'numPoints'  # 'numPoints' or 'dates'
 numPoints = 1
 startDate = '2023-10-25 00:00:00'  # yyyy-MM-dd HH:mm:ss (inclusive dates and times)
 endDate = '2023-11-28 00:00:00'  # yyyy-MM-dd HH:mm:ss (inclusive dates and times)
-weekdays = (0, 1, 2, 3, 4, 5)  # 0: Mon, 6: Sun (deactivated in time portion above is equal) 
-# !!! ^^^ ADD THIS POINT IN DOCSTRINGS
+weekdays = (0, 1, 2, 3, 4, 5)  # 0: Mon, 6: Sun (deactivated if time portion above is equal) 
+
 """API HISTORICAL DATA LIMITS (INDICATION)
 ------------------------------------------
 Resolution	    Days
