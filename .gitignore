@@ -2,3 +2,4 @@ user_info.py
 __pycache__/
 .vscode/settings.json
 quickstart (PRIVATE).py
+dist/
