@@ -27,10 +27,10 @@ class IG_API:
                 * 0: use Live account and environment URL
             * username (str): username
             * pw (str): password
-            * api_key(str): API key
+            * api_key (str): API key
         ---
         Raises:
-            * Exception: if status_code != 200 (i.e. could not log in)
+            * ValueError: if status_code != 200 (i.e. could not log in)
         ---
         Returns:
             * Nothing. Instead updates class instance attributes that are 
