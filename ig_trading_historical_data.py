@@ -80,12 +80,13 @@ class IG_API:
             print('----------------------')
             print('Successfully logged in')
             print('----------------------')
+            print()
         else:
             print('----------------------')
             print('ERROR OCCURED')
             print('----------------------')
             print(f'STATUS CODE: {r.status_code}')
-            print(r.content)
+            print()
             
             raise ValueError(r.content)
 
