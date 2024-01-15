@@ -80,7 +80,7 @@ from pprint import pprint  # for nicer dictionary printing
 Input user information:
 ```python
 # account details
-DEMO = 1  # 1: using demo account / 0: using live account
+demo = 1  # 1: using demo account / 0: using live account
 username = user_info.username
 pw = user_info.pw
 api_key = user_info.api_key
@@ -130,7 +130,7 @@ You can of course still get every data point available by simply keeping the tim
 
 #### Logging in / make a class instance:
 ```python
-ig_api = IG_API(DEMO, username, pw, api_key)
+ig_api = IG_API(demo, username, pw, api_key)
 ```
 Output:
 

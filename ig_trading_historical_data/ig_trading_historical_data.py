@@ -10,9 +10,14 @@ import time
 # API class definition
 # ------------------------------------------------------------------
 class IG_API:
+    """
+    Create an instance of this class to log into the IG REST API (using valid credentials).
+    Use the methods to gather data.
+    """
+
     def __init__(
         self,
-        DEMO: int,
+        demo: int,
         username: str,
         pw: str,
         api_key: str,
@@ -22,7 +27,7 @@ class IG_API:
 
         ---
         Args:
-            * DEMO (int):
+            * demo (int):
                 * 1: use Demo account and environment URL
                 * 0: use Live account and environment URL
             * username (str): username
@@ -44,13 +49,13 @@ class IG_API:
                 * header_base (dict): needed for all further API calls
         """
         # instantiate variables
-        self.DEMO = DEMO
+        self.demo = demo
         self.username = username
         self.pw = pw
         self.api_key = api_key
 
         # determine correct URL (API gateway location link)
-        self.url_base = "https://" + "demo-" * DEMO + "api.ig.com/gateway/deal"
+        self.url_base = "https://" + "demo-" * demo + "api.ig.com/gateway/deal"
 
         # log in: variables
         url = f"{self.url_base}/session"
