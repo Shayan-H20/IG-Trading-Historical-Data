@@ -40,8 +40,8 @@ class IG_API:
         Returns:
             * Nothing. Instead updates class instance attributes that are
             used in later methods:
-                * token_CST (str): needed for all further API calls
-                * token_X_SECURITY_TOKEN (str): needed for all further API calls
+                * token_cst (str): needed for all further API calls
+                * token_x_security_token (str): needed for all further API calls
                 * ls_addr (str): Lightstream address
                 * utc_offset (str): timezoneOffset information
                 * acc_info (dict): dict of misc. account data
@@ -90,8 +90,8 @@ class IG_API:
 
         # retrieve tokens that MUST BE PASSED AS HEADERS to ALL subsequent API requests
         # [both tokens valid for 6H?]; get extended up to max of 72H while they are in use
-        self.token_CST = r.headers["CST"]  # client ID
-        self.token_X_SECURITY_TOKEN = r.headers["X-SECURITY-TOKEN"]  # current account
+        self.token_cst = r.headers["CST"]  # client ID
+        self.token_x_security_token = r.headers["X-SECURITY-TOKEN"]  # current account
 
         # retreieve Lightstream address (required for all streaming connections)
         self.ls_addr = self.acc_info["lightstreamerEndpoint"]
@@ -104,8 +104,8 @@ class IG_API:
             "Content-Type": "application/json; charset=UTF-8",
             "Accept": "application/json; charset=UTF-8",
             "X-IG-API-KEY": api_key,
-            "CST": self.token_CST,
-            "X-SECURITY-TOKEN": self.token_X_SECURITY_TOKEN,
+            "CST": self.token_cst,
+            "X-SECURITY-TOKEN": self.token_x_security_token,
         }
 
     def get_watchlist(
@@ -224,11 +224,11 @@ class IG_API:
         self,
         epic: str,
         resolution: str,
-        rangeType: str,
-        startDate: str = None,
-        endDate: str = None,
+        range_type: str,
+        start_date: str = None,
+        end_date: str = None,
         weekdays: tuple[int] = (0, 1, 2, 3, 4, 5, 6),
-        numPoints: int = None,
+        num_points: int = None,
     ) -> tuple:
         """
         Get prices DataFrame (bid/ask/mid/spreads for all OHLC prices and volume)
@@ -242,15 +242,15 @@ class IG_API:
             * resolution (str): price resolution
                 * SECOND, MINUTE, MINUTE_2, MINUTE_3, MINUTE_5, MINUTE_10,
                 MINUTE_15, MINUTE_30, HOUR, HOUR_2, HOUR_3, HOUR_4, DAY, WEEK, MONTH
-            * rangeType (str):
-                * 'numPoints': use numPoints argument
-                * 'dates': use startDate/endDate arguments with given timeInterval (see below)
-            * startDate (str, opt. depending on rangeType):
+            * range_type (str):
+                * 'num_points': use num_points argument
+                * 'dates': use start_date/end_date arguments with given timeInterval (see below)
+            * start_date (str, opt. depending on range_type):
                 * yyyy-MM-dd HH:mm:ss (inclusive)
                 * the time portion indicates timeIntervalStart
                 * see full description on how to use this below this 'Args' block
                 * defaults to None
-            * endDate (str, opt. depending on rangeType):
+            * end_date (str, opt. depending on range_type):
                 * yyyy-MM-dd HH:mm:ss (inclusive)
                 * the time portion indicates timeIntervalEnd
                 * see full description on how to use this below this 'Args' block
@@ -260,11 +260,11 @@ class IG_API:
                 * defaults to all days of the week (0, 1, 2, 3, 4, 5, 6)
                 * NOTE: this is only applied to the code when the time portion
                 of the date range is different
-            * numPoints (int, opt. depending on rangeType):
-                * get last numPoints data points
+            * num_points (int, opt. depending on range_type):
+                * get last num_points data points
                 * defaults to None
         ---
-        Notes to startDate/endDate:
+        Notes to start_date/end_date:
             * if the time portions are the SAME (00:00:00) then data is fetched using
             ALL the 24 hours in EVERY single day available ('weekdays' parameter is IGNORED)
             * if the time portions are DIFFERENT from one another, then the timeInterval and
@@ -292,27 +292,27 @@ class IG_API:
         # i.e. not using and timeInterval (later updated if necessary)
         timeIntervalFlag = 0
 
-        # rangeType selection
-        if rangeType == "numPoints":
-            url = f"{self.url_base}/prices/{epic}/{resolution}/{numPoints}"
+        # range_type selection
+        if range_type == "num_points":
+            url = f"{self.url_base}/prices/{epic}/{resolution}/{num_points}"
 
-            # number of times to loop requests.get for this rangeType method
+            # number of times to loop requests.get for this range_type method
             n = 1
 
-        elif rangeType == "dates":
+        elif range_type == "dates":
             # unpack dates to dates and timeInterval
-            dateStart, timeIntervalStart = startDate.split()
-            dateEnd, timeIntervalEnd = endDate.split()
+            dateStart, timeIntervalStart = start_date.split()
+            dateEnd, timeIntervalEnd = end_date.split()
 
             # condition to exclude time intervals
             # gets all data points possible
             # ignores 'weekdays' selection
             if timeIntervalStart == timeIntervalEnd:
                 url = (
-                    f"{self.url_base}/prices/{epic}/{resolution}/{startDate}/{endDate}"
+                    f"{self.url_base}/prices/{epic}/{resolution}/{start_date}/{end_date}"
                 )
 
-                # number of times to loop requests.get for this rangeType method
+                # number of times to loop requests.get for this range_type method
                 n = 1
 
             else:
@@ -321,25 +321,25 @@ class IG_API:
                 timeIntervalFlag = 1
 
                 # create date range taking into account 'weekdays' input
-                dateRange = pd.date_range(dateStart, dateEnd)
-                dateRange = list(filter(lambda x: x.weekday() in weekdays, dateRange))
-                dateRange = [x.strftime("%Y-%m-%d") for x in dateRange]
+                date_range = pd.date_range(dateStart, dateEnd)
+                date_range = list(filter(lambda x: x.weekday() in weekdays, date_range))
+                date_range = [x.strftime("%Y-%m-%d") for x in date_range]
 
-                # number of times to loop requests.get for this rangeType method
-                n = len(dateRange)
+                # number of times to loop requests.get for this range_type method
+                n = len(date_range)
 
         header = self.header_base.copy()
         header["Version"] = "2"
 
         # initialize list for loop
-        pricesHistorical = []
+        prices_historical = []
 
         for i in range(n):
             if timeIntervalFlag:
-                startDate = f"{dateRange[i]} {timeIntervalStart}"
-                endDate = f"{dateRange[i]} {timeIntervalEnd}"
+                start_date = f"{date_range[i]} {timeIntervalStart}"
+                end_date = f"{date_range[i]} {timeIntervalEnd}"
                 url = (
-                    f"{self.url_base}/prices/{epic}/{resolution}/{startDate}/{endDate}"
+                    f"{self.url_base}/prices/{epic}/{resolution}/{start_date}/{end_date}"
                 )
 
             # prices: GET request
@@ -349,24 +349,24 @@ class IG_API:
             # [for limit of 60 per minute]
             # or 2s [for limit of 30 per minute]
             # in reality, so far 3s sleep throws no error, whereas 1s or 2s still gives error
-            timerStart = time.time()
+            timer_start = time.time()
 
             r = requests.get(url=url, headers=header)
 
             timerEnd = time.time()
 
-            timeTaken = timerEnd - timerStart
-            print(f"{timeTaken:.2f} seconds for asset {epic} to run day {i+1}/{n}")
+            time_taken = timerEnd - timer_start
+            print(f"{time_taken:.2f} seconds for asset {epic} to run day {i+1}/{n}")
 
             # if NOT a single API call
             if n != 1:
                 # number of seconds to sleep between each API call
                 # to avoid exceeding unknown limit
-                secondsForceSleep = 3.0
+                seconds_force_sleep = 3.0
 
-                # sleep if time taken for request is less than value of secondsForceSleep
-                if timeTaken < secondsForceSleep:
-                    time.sleep(secondsForceSleep - timeTaken)
+                # sleep if time taken for request is less than value of seconds_force_sleep
+                if time_taken < seconds_force_sleep:
+                    time.sleep(seconds_force_sleep - time_taken)
 
             # store JSON result
             res = r.json()
@@ -387,47 +387,47 @@ class IG_API:
             # NOTE:
             #   res['prices'] is a list
             #   each elem is a different point in times' price info
-            pricesHistorical.extend(res["prices"])
+            prices_historical.extend(res["prices"])
 
         # unpack result
         allowance = res["allowance"]
         instrumentType = res["instrumentType"]
 
         ##########################
-        # convert pricesHistorical list to 4 DataFrames
+        # convert prices_historical list to 4 DataFrames
         # and then merge into 1 DataFrame with all fields: bid, ask, mid, spread, volume etc.
         ##########################
         # conversion inputs
-        priceTypes = ["openPrice", "highPrice", "lowPrice", "closePrice"]
+        price_types = ["openPrice", "highPrice", "lowPrice", "closePrice"]
         lastTradedVolumes = []
-        snapshotTimes = []
-        i = 0  # counter so we only gather snapshotTimes values only ONCE
+        snapshot_times = []
+        i = 0  # counter so we only gather snapshot_times values only ONCE
 
         # initialize output dict
         prices = {
-            "bid": {k: [] for k in priceTypes},
-            "ask": {k: [] for k in priceTypes},
+            "bid": {k: [] for k in price_types},
+            "ask": {k: [] for k in price_types},
         }
 
         # retrieve data in correct ordered way and place into DataFrames
         for k in prices:
-            for t in pricesHistorical:
-                for pType in priceTypes:
-                    prices[k][pType].append(t[pType][k])
+            for t in prices_historical:
+                for p_type in price_types:
+                    prices[k][p_type].append(t[p_type][k])
 
                 if i == 0:
                     lastTradedVolumes.append(t["lastTradedVolume"])
-                    snapshotTimes.append(pd.to_datetime(t["snapshotTime"]))
+                    snapshot_times.append(pd.to_datetime(t["snapshotTime"]))
 
-            prices[k] = pd.DataFrame(data=prices[k], index=snapshotTimes)
+            prices[k] = pd.DataFrame(data=prices[k], index=snapshot_times)
 
             i += 1
 
         # create 'mid' DataFrame
-        prices["mid"] = (prices["bid"][priceTypes] + prices["ask"][priceTypes]) / 2
+        prices["mid"] = (prices["bid"][price_types] + prices["ask"][price_types]) / 2
 
         # create 'spread' DataFrame
-        prices["spread"] = prices["ask"][priceTypes] - prices["bid"][priceTypes]
+        prices["spread"] = prices["ask"][price_types] - prices["bid"][price_types]
 
         # rename headers to shorten 'Prices' > 'Px'
         # and append type of field (bid, ask, mid, spread)
@@ -449,11 +449,11 @@ class IG_API:
         self,
         assets: dict,
         resolution: str,
-        rangeType: str,
-        startDate: str = None,
-        endDate: str = None,
+        range_type: str,
+        start_date: str = None,
+        end_date: str = None,
         weekdays: tuple[int] = (0, 1, 2, 3, 4, 5, 6),
-        numPoints: int = None,
+        num_points: int = None,
     ) -> tuple[dict]:
         """
         Get prices DataFrame (bid/ask/mid/spreads for all OHLC prices and volume)
@@ -467,15 +467,15 @@ class IG_API:
             * resolution (str): price resolution
                 * SECOND, MINUTE, MINUTE_2, MINUTE_3, MINUTE_5, MINUTE_10,
                 MINUTE_15, MINUTE_30, HOUR, HOUR_2, HOUR_3, HOUR_4, DAY, WEEK, MONTH
-            * rangeType (str):
-                * 'numPoints': use numPoints argument
-                * 'dates': use startDate/endDate arguments with given timeInterval (see below)
-            * startDate (str, opt. depending on rangeType):
+            * range_type (str):
+                * 'num_points': use num_points argument
+                * 'dates': use start_date/end_date arguments with given timeInterval (see below)
+            * start_date (str, opt. depending on range_type):
                 * yyyy-MM-dd HH:mm:ss (inclusive)
                 * the time portion indicates timeIntervalStart
                 * see full description on how to use this below this 'Args' block
                 * defaults to None
-            * endDate (str, opt. depending on rangeType):
+            * end_date (str, opt. depending on range_type):
                 * yyyy-MM-dd HH:mm:ss (inclusive)
                 * the time portion indicates timeIntervalEnd
                 * see full description on how to use this below this 'Args' block
@@ -485,11 +485,11 @@ class IG_API:
                 * defaults to all days of the week (0, 1, 2, 3, 4, 5, 6)
                 * NOTE: this is only applied to the code when the time portion
                 of the date range is different
-            * numPoints (int, opt. depending on rangeType):
-                * get last numPoints data points
+            * num_points (int, opt. depending on range_type):
+                * get last num_points data points
                 * defaults to None
         ---
-        Notes to startDate/endDate:
+        Notes to start_date/end_date:
             * if the time portions are the SAME (00:00:00) then data is fetched using
             ALL the 24 hours in EVERY single day available ('weekdays' parameter is IGNORED)
             * if the time portions are DIFFERENT from one another, then the timeInterval and
@@ -520,7 +520,7 @@ class IG_API:
             epic = assets[asset]["epic"]
 
             prices, allowance, instrumentType = self.get_prices_single_asset(
-                epic, resolution, rangeType, startDate, endDate, weekdays, numPoints
+                epic, resolution, range_type, start_date, end_date, weekdays, num_points
             )
 
             assets[asset]["prices"] = prices

@@ -29,10 +29,10 @@ assets = {
 
 # historical data inputs
 resolution = 'MINUTE_5'  # price resolution (SECOND, MINUTE, MINUTE_2, MINUTE_3, MINUTE_5, MINUTE_10, MINUTE_15, MINUTE_30, HOUR, HOUR_2, HOUR_3, HOUR_4, DAY, WEEK, MONTH)
-rangeType = 'dates'  # 'numPoints' or 'dates'
-numPoints = 10  # ignored if rangeType == 'dates'
-startDate = '2024-01-08 10:00:00'  # yyyy-MM-dd HH:mm:ss (inclusive dates and times)
-endDate = '2024-01-10 10:30:00'  # yyyy-MM-dd HH:mm:ss (inclusive dates and times)
+range_type = 'dates'  # 'num_points' or 'dates'
+num_points = 10  # ignored if range_type == 'dates'
+start_date = '2024-01-08 10:00:00'  # yyyy-MM-dd HH:mm:ss (inclusive dates and times)
+end_date = '2024-01-10 10:30:00'  # yyyy-MM-dd HH:mm:ss (inclusive dates and times)
 weekdays = (0, 2)  # 0: Mon, 6: Sun (deactivated if time portion above is equal) 
 
 
@@ -51,11 +51,11 @@ pprint(assets)
 assets, allowance = ig_api.get_prices_all_assets(
     assets, 
     resolution, 
-    rangeType, 
-    startDate,
-    endDate,
+    range_type, 
+    start_date,
+    end_date,
     weekdays,
-    numPoints
+    num_points
 )
 
 # view data fields

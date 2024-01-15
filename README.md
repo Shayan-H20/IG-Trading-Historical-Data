@@ -108,13 +108,13 @@ Historical data inputs:
 
 ```python
 resolution = 'MINUTE_5'  # price resolution (SECOND, MINUTE, MINUTE_2, MINUTE_3, MINUTE_5, MINUTE_10, MINUTE_15, MINUTE_30, HOUR, HOUR_2, HOUR_3, HOUR_4, DAY, WEEK, MONTH)
-rangeType = 'dates'  # 'numPoints' or 'dates'
-numPoints = 10  # ignored if rangeType == 'dates'
-startDate = '2024-01-08 10:00:00'  # yyyy-MM-dd HH:mm:ss (inclusive dates and times)
-endDate = '2024-01-10 10:30:00'  # yyyy-MM-dd HH:mm:ss (inclusive dates and times)
+range_type = 'dates'  # 'num_points' or 'dates'
+num_points = 10  # ignored if range_type == 'dates'
+start_date = '2024-01-08 10:00:00'  # yyyy-MM-dd HH:mm:ss (inclusive dates and times)
+end_date = '2024-01-10 10:30:00'  # yyyy-MM-dd HH:mm:ss (inclusive dates and times)
 weekdays = (0, 2)  # 0: Mon, 6: Sun (deactivated if time portion above is equal) 
 ```
-Since the `rangeType='dates'` and the time portion of `startDate` and `endDate` are different, historical data will be obtained between 8th January 2024 until 10th January 2024, but ONLY during the hours of 10am-10:30am.
+Since the `range_type='dates'` and the time portion of `start_date` and `end_date` are different, historical data will be obtained between 8th January 2024 until 10th January 2024, but ONLY during the hours of 10am-10:30am.
 
 Additionally, only the `weekdays` with values 0 and 2 will have their data gathered (i.e. Monday and Wednesday in this example). 
 
@@ -124,7 +124,7 @@ This significantly saves **quota** (measued in number of data points gathered), 
 
 > **Of course, this is assuming you only care about data during a given time interval and given days of the week.**
 
-You can of course still get every data point available by simply keeping the time portion above the same for both `startDate` and `endDate`.
+You can of course still get every data point available by simply keeping the time portion above the same for both `start_date` and `end_date`.
 
 ## API key usage
 
@@ -163,11 +163,11 @@ Output:
 assets, allowance = ig_api.get_prices_all_assets(
     assets, 
     resolution, 
-    rangeType, 
-    startDate,
-    endDate,
+    range_type, 
+    start_date,
+    end_date,
     weekdays,
-    numPoints
+    num_points
 )
 ```
 
@@ -262,5 +262,5 @@ pprint(allowance)
 **get_epics(assets)**:
 * Return the 'assets' dict updated with each assets' epic.
 
-**get_prices_single_asset(epic, resolution, rangeType, startDate, endDate, weekdays, numPoints)**:
+**get_prices_single_asset(epic, resolution, range_type, start_date, end_date, weekdays, num_points)**:
 * Get prices DataFrame (bid/ask/mid/spreads for all OHLC prices and volume) for given parameters and time; also returns 'allowance' dict (resets every 7 days to 10,000 historical price data points).
