@@ -1,5 +1,7 @@
 A Python wrapper for extracting historical data in a quota-efficient way from IG's Trading API (can specify a daily time range for data gathering).
 
+PyPI page: https://pypi.org/project/ig-trading-historical-data/
+
 ### Slightly more detailed description
 This is a quota-efficient method of extracting data as can extract data between the hours of for example 13:00-16:00 on specified days of the week. This is instead of the default action of gathering all 24H of data for every single day of the week (given availability) which consumes increased quota allowance.
 
@@ -53,10 +55,10 @@ The difference between this package and others found so far is the following:
 
 ## Setup
 
-Install using pip (NOT PUBLISHED YET):
+Install using pip:
 
 ```
-pip install ig_trading_historical_data
+pip install ig-trading-historical-data
 ```
 
 Prepare a `user_info.py` file (storage of sensitive information) in your projects directory with the following code:
