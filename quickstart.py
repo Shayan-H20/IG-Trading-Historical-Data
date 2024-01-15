@@ -17,12 +17,12 @@ api_key = user_info.api_key
 assets = {
     
     'GBPUSD Forward': {  # asset name in normal language (without slashes)
-        'instrumentName': 'GBP/USD Forward',  # asset name in EXACT way as seen on IG web platform (with slashes if relevant)
+        'instrument_name': 'GBP/USD Forward',  # asset name in EXACT way as seen on IG web platform (with slashes if relevant)
         'expiry': 'MAR-24'  # either 'DFB' or the expiration date
     },
 
     'Microsoft': {  # another asset example
-        'instrumentName': 'Microsoft Corp (All Sessions)',  
+        'instrument_name': 'Microsoft Corp (All Sessions)',  
         'expiry': 'DFB'
     },
 }
@@ -72,5 +72,5 @@ print(assets['Microsoft']['prices'])
 pprint(allowance)
 
 # view instrument types
-pprint(assets['GBPUSD Forward']['instrumentType'])
-pprint(assets['Microsoft']['instrumentType'])
+pprint(assets['GBPUSD Forward']['instrument_type'])
+pprint(assets['Microsoft']['instrument_type'])

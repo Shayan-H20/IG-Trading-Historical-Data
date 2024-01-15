@@ -1,9 +1,11 @@
+""" this module contains the IG_API class that is used to log in and gather data."""
+
 # ------------------------------------------------------------------
 # import packages
 # ------------------------------------------------------------------
+import time
 import requests
 import pandas as pd
-import time
 
 
 # ------------------------------------------------------------------
@@ -130,15 +132,15 @@ class IG_API:
 
     def get_market_search(
         self,
-        searchTerm: str = None,
+        search_term: str = None,
     ) -> dict:
         """
-        Get list (value of first key) of available assets having match with searchTerm,
+        Get list (value of first key) of available assets having match with search_term,
         later use another function to get the epic of a specific asset of interest.
 
         ---
         Args:
-            * searchTerm (str, default None): str used in search
+            * search_term (str, default None): str used in search
 
         ---
         Returns:
@@ -147,7 +149,7 @@ class IG_API:
                 (but first find correct asset in list of results)
         """
         # market_search: variables
-        url = f"{self.url_base}/markets?searchTerm={searchTerm}"
+        url = f"{self.url_base}/markets?searchTerm={search_term}"
         header = self.header_base
 
         # market_search: GET request
@@ -158,8 +160,8 @@ class IG_API:
 
     def find_asset_epic_or_info(
         self,
-        marketSearchDict: dict,
-        instrumentName: str,
+        market_search_dict: dict,
+        instrument_name: str,
         expiry: str = "DFB",
         epic_only: int = 1,
     ) -> str:
@@ -169,8 +171,8 @@ class IG_API:
 
         ---
         Args:
-            * marketSearchDict (dict): output of 'get_market_search' method
-            * instrumentName (str): exactly as seen on IG web platform
+            * market_search_dict (dict): output of 'get_market_search' method
+            * instrument_name (str): exactly as seen on IG web platform
             (i.e. 'GBP/USD' or 'GBP/USD Forward')
             * expiry (str, default='DFB'): either 'DFB' or the expiration date
             (i.e. 'DEC-23' if a Forward etc.)
@@ -181,10 +183,10 @@ class IG_API:
         Returns:
             * str or dict: epic string or dict with info found about the asset of interest
         """
-        for asset_details in marketSearchDict["markets"]:
+        for asset_details in market_search_dict["markets"]:
             if all(
                 [
-                    asset_details["instrumentName"] == instrumentName,
+                    asset_details["instrument_name"] == instrument_name,
                     asset_details["expiry"] == expiry,
                 ]
             ):
@@ -200,20 +202,20 @@ class IG_API:
         Args:
             * assets (dict of dict):
                 * example key: 'GBPUSD'
-                    * value: dict(key: 'instrumentName', value: 'GBP/USD')
+                    * value: dict(key: 'instrument_name', value: 'GBP/USD')
         ---
         Returns:
             * dict of dict: 'assets' input dict updated and returned
         """
         # loop to get epics for all assets in 'assets' dict
         for asset_name, d in assets.items():
-            instrumentName = d["instrumentName"]
+            instrument_name = d["instrument_name"]
             expiry = d["expiry"]
             assets[asset_name]["epic"] = self.find_asset_epic_or_info(
                 self.get_market_search(
                     asset_name,
                 ),
-                instrumentName,
+                instrument_name,
                 expiry,
                 epic_only=1,
             )
@@ -247,12 +249,12 @@ class IG_API:
                 * 'dates': use start_date/end_date arguments with given timeInterval (see below)
             * start_date (str, opt. depending on range_type):
                 * yyyy-MM-dd HH:mm:ss (inclusive)
-                * the time portion indicates timeIntervalStart
+                * the time portion indicates time_interval_start
                 * see full description on how to use this below this 'Args' block
                 * defaults to None
             * end_date (str, opt. depending on range_type):
                 * yyyy-MM-dd HH:mm:ss (inclusive)
-                * the time portion indicates timeIntervalEnd
+                * the time portion indicates time_interval_end
                 * see full description on how to use this below this 'Args' block
                 * defaults to None
             * weekdays (tup[int], opt.):
@@ -286,11 +288,11 @@ class IG_API:
                     combination is allowed to fetch in any given allowance period
                     * allowanceExpiry: number of seconds till current allowance period
                     ends and remainingAllowance field is reset
-                * instrumentType (str): e.g. CURRENCIES
+                * instrument_type (str): e.g. CURRENCIES
         """
         # initialize flag at 0
         # i.e. not using and timeInterval (later updated if necessary)
-        timeIntervalFlag = 0
+        time_interval_flag = 0
 
         # range_type selection
         if range_type == "num_points":
@@ -301,13 +303,13 @@ class IG_API:
 
         elif range_type == "dates":
             # unpack dates to dates and timeInterval
-            dateStart, timeIntervalStart = start_date.split()
-            dateEnd, timeIntervalEnd = end_date.split()
+            date_start, time_interval_start = start_date.split()
+            date_end, time_interval_end = end_date.split()
 
             # condition to exclude time intervals
             # gets all data points possible
             # ignores 'weekdays' selection
-            if timeIntervalStart == timeIntervalEnd:
+            if time_interval_start == time_interval_end:
                 url = (
                     f"{self.url_base}/prices/{epic}/{resolution}/{start_date}/{end_date}"
                 )
@@ -318,10 +320,10 @@ class IG_API:
             else:
                 # activate flag ONLY if 'dates' selected and time intervals DIFFER
                 # 'weekdays' input only taken into account HERE
-                timeIntervalFlag = 1
+                time_interval_flag = 1
 
                 # create date range taking into account 'weekdays' input
-                date_range = pd.date_range(dateStart, dateEnd)
+                date_range = pd.date_range(date_start, date_end)
                 date_range = list(filter(lambda x: x.weekday() in weekdays, date_range))
                 date_range = [x.strftime("%Y-%m-%d") for x in date_range]
 
@@ -335,9 +337,9 @@ class IG_API:
         prices_historical = []
 
         for i in range(n):
-            if timeIntervalFlag:
-                start_date = f"{date_range[i]} {timeIntervalStart}"
-                end_date = f"{date_range[i]} {timeIntervalEnd}"
+            if time_interval_flag:
+                start_date = f"{date_range[i]} {time_interval_start}"
+                end_date = f"{date_range[i]} {time_interval_end}"
                 url = (
                     f"{self.url_base}/prices/{epic}/{resolution}/{start_date}/{end_date}"
                 )
@@ -353,9 +355,9 @@ class IG_API:
 
             r = requests.get(url=url, headers=header)
 
-            timerEnd = time.time()
+            timer_end = time.time()
 
-            time_taken = timerEnd - timer_start
+            time_taken = timer_end - timer_start
             print(f"{time_taken:.2f} seconds for asset {epic} to run day {i+1}/{n}")
 
             # if NOT a single API call
@@ -391,7 +393,7 @@ class IG_API:
 
         # unpack result
         allowance = res["allowance"]
-        instrumentType = res["instrumentType"]
+        instrument_type = res["instrumentType"]
 
         ##########################
         # convert prices_historical list to 4 DataFrames
@@ -399,7 +401,7 @@ class IG_API:
         ##########################
         # conversion inputs
         price_types = ["openPrice", "highPrice", "lowPrice", "closePrice"]
-        lastTradedVolumes = []
+        last_traded_volume = []
         snapshot_times = []
         i = 0  # counter so we only gather snapshot_times values only ONCE
 
@@ -416,7 +418,7 @@ class IG_API:
                     prices[k][p_type].append(t[p_type][k])
 
                 if i == 0:
-                    lastTradedVolumes.append(t["lastTradedVolume"])
+                    last_traded_volume.append(t["lastTradedVolume"])
                     snapshot_times.append(pd.to_datetime(t["snapshotTime"]))
 
             prices[k] = pd.DataFrame(data=prices[k], index=snapshot_times)
@@ -436,14 +438,14 @@ class IG_API:
                 "Price", f"Px{k.capitalize()}"
             )
 
-        # merge the DataFrames and add lastTradedVolume column
+        # merge the DataFrames and add last_traded_volume column
         prices = pd.concat([prices[k] for k in prices], axis=1)
-        prices["lastTradedVolume"] = lastTradedVolumes
+        prices["last_traded_volume"] = last_traded_volume
         ##########################
         # end of conversion from list to 1 DataFrame
         ##########################
 
-        return prices, allowance, instrumentType
+        return prices, allowance, instrument_type
 
     def get_prices_all_assets(
         self,
@@ -472,12 +474,12 @@ class IG_API:
                 * 'dates': use start_date/end_date arguments with given timeInterval (see below)
             * start_date (str, opt. depending on range_type):
                 * yyyy-MM-dd HH:mm:ss (inclusive)
-                * the time portion indicates timeIntervalStart
+                * the time portion indicates time_interval_start
                 * see full description on how to use this below this 'Args' block
                 * defaults to None
             * end_date (str, opt. depending on range_type):
                 * yyyy-MM-dd HH:mm:ss (inclusive)
-                * the time portion indicates timeIntervalEnd
+                * the time portion indicates time_interval_end
                 * see full description on how to use this below this 'Args' block
                 * defaults to None
             * weekdays (tup[int], opt.):
@@ -502,11 +504,11 @@ class IG_API:
         ---
         Returns:
             * tuple:
-                * assets (dict): updated with 'prices' and 'instrumentType' keys for each
+                * assets (dict): updated with 'prices' and 'instrument_type' keys for each
                 asset (each asset is the first layer of keys)
                     * prices (DataFrame): bid/ask/mid/spreads for all OHLC prices
                     and volume data for all time periods within time interval
-                    * instrumentType (str): e.g. CURRENCIES
+                    * instrument_type (str): e.g. CURRENCIES
 
                 * allowance (dict):
                     * remainingAllowance: number of data points still available to fetch
@@ -519,11 +521,11 @@ class IG_API:
         for asset in assets:
             epic = assets[asset]["epic"]
 
-            prices, allowance, instrumentType = self.get_prices_single_asset(
+            prices, allowance, instrument_type = self.get_prices_single_asset(
                 epic, resolution, range_type, start_date, end_date, weekdays, num_points
             )
 
             assets[asset]["prices"] = prices
-            assets[asset]["instrumentType"] = instrumentType
+            assets[asset]["instrument_type"] = instrument_type
 
         return assets, allowance
