@@ -9,25 +9,25 @@ This is a quota-efficient method of extracting data as can extract data between 
 
 Data outputted is in the form of a *pandas.DataFrame* with the following columns:
 
-    * openPxMid
-    * highPxMid
-    * lowPxMid
-    * closePxMid
+    * open_px_mid
+    * high_px_mid
+    * low_px_mid
+    * close_px_mid
 
-    * openPxBid
-    * highPxBid
-    * lowPxBid
-    * closePxBid
+    * open_px_bid
+    * high_px_bid
+    * low_px_bid
+    * close_px_bid
 
-    * openPxAsk
-    * highPxAsk
-    * lowPxAsk
-    * closePxAsk
+    * open_px_ask
+    * high_px_ask
+    * low_px_ask
+    * close_px_ask
 
-    * openPxSpread
-    * highPxSpread
-    * lowPxSpread
-    * closePxSpread
+    * open_px_spread
+    * high_px_spread
+    * low_px_spread
+    * close_px_spread
 
     * last_traded_volume
 
@@ -190,7 +190,7 @@ print(assets['GBPUSD Forward']['prices'])
 
 Output:
 
-                        openPxBid  highPxBid  lowPxBid  closePxBid  openPxAsk  highPxAsk  lowPxAsk  closePxAsk  openPxMid  highPxMid  lowPxMid  closePxMid  openPxSpread  highPxSpread  lowPxSpread  closePxSpread  last_traded_volume
+                        open_px_bid  high_px_bid  low_px_bid  close_px_bid  open_px_ask  high_px_ask  low_px_ask  close_px_ask  open_px_mid  high_px_mid  low_px_mid  close_px_mid  open_px_spread  high_px_spread  low_px_spread  close_px_spread  last_traded_volume
     2024-01-08 10:00:00    12695.2    12697.0   12693.0     12694.6    12705.7    12707.5   12703.5     12705.1   12700.45   12702.25  12698.25    12699.85          10.5          10.5         10.5           10.5               341
     2024-01-08 10:05:00    12694.7    12698.2   12693.4     12697.8    12705.2    12708.7   12703.9     12708.3   12699.95   12703.45  12698.65    12703.05          10.5          10.5         10.5           10.5               311
     2024-01-08 10:10:00    12697.7    12699.5   12695.4     12696.4    12708.2    12710.0   12705.9     12706.9   12702.95   12704.75  12700.65    12701.65          10.5          10.5         10.5           10.5               306
@@ -209,10 +209,10 @@ Output:
 The columns are: 
 
     [
-        'openPxBid', 'highPxBid', 'lowPxBid', 'closePxBid', 
-        'openPxAsk', 'highPxAsk', 'lowPxAsk', 'closePxAsk', 
-        'openPxMid', 'highPxMid', 'lowPxMid', 'closePxMid', 
-        'openPxSpread', 'highPxSpread', 'lowPxSpread', 'closePxSpread', 
+        'open_px_bid', 'high_px_bid', 'low_px_bid', 'close_px_bid', 
+        'open_px_ask', 'high_px_ask', 'low_px_ask', 'close_px_ask', 
+        'open_px_mid', 'high_px_mid', 'low_px_mid', 'close_px_mid', 
+        'open_px_spread', 'high_px_spread', 'low_px_spread', 'close_px_spread', 
         'last_traded_volume'
     ]
 

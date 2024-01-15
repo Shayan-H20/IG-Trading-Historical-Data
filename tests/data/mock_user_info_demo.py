@@ -1,4 +1,5 @@
 """ initialize class variables """
+
 mock_user_info_demo = {
     "demo": 1,
     "username": "test_username",

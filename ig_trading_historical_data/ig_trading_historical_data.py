@@ -186,7 +186,7 @@ class IG_API:
         for asset_details in market_search_dict["markets"]:
             if all(
                 [
-                    asset_details["instrument_name"] == instrument_name,
+                    asset_details["instrumentName"] == instrument_name,
                     asset_details["expiry"] == expiry,
                 ]
             ):
@@ -435,7 +435,7 @@ class IG_API:
         # and append type of field (bid, ask, mid, spread)
         for k in prices:
             prices[k].columns = prices[k].columns.str.replace(
-                "Price", f"Px{k.capitalize()}"
+                "Price", f"_px_{k}"
             )
 
         # merge the DataFrames and add last_traded_volume column
