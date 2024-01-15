@@ -7,7 +7,7 @@ from pprint import pprint  # for nicer dictionary printing
 """ input user information """
 
 # account details
-DEMO = 1  # 1: using demo account / 0: using live account
+demo = 1  # 1: using demo account / 0: using live account
 username = user_info.username
 pw = user_info.pw
 api_key = user_info.api_key
@@ -39,7 +39,7 @@ weekdays = (0, 2)  # 0: Mon, 6: Sun (deactivated if time portion above is equal)
 """ API key usage """
 
 # logging in / make a class instance
-ig_api = IG_API(DEMO, username, pw, api_key)
+ig_api = IG_API(demo, username, pw, api_key)
 
 # get epics automatically and update 'assets' dict with respective epics
 assets = ig_api.get_epics(assets)
