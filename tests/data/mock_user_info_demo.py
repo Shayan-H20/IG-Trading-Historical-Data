@@ -1,6 +1,6 @@
 # initialize class variables
 mock_user_info_demo = {
-    "DEMO": 1,
+    "demo": 1,
     "username": "test_username",
     "pw": "test_pw",
     "api_key": "test_api_key"
