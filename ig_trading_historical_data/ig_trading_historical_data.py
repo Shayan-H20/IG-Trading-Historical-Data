@@ -11,11 +11,11 @@ import time
 # ------------------------------------------------------------------
 class IG_API:
     def __init__(
-        self, 
-        DEMO: int, 
-        username: str, 
-        pw: str, 
-        api_key: str, 
+        self,
+        DEMO: int,
+        username: str,
+        pw: str,
+        api_key: str,
         ) -> None:
         """
         Log into the IG REST API.
@@ -52,12 +52,12 @@ class IG_API:
         # determine correct URL (API gateway location link)
         self.url_base = 'https://' + 'demo-'*DEMO + 'api.ig.com/gateway/deal'
         
-        # log in: variables 
+        # log in: variables
         url = f'{self.url_base}/session'
         header = {
             'Content-Type': 'application/json; charset=UTF-8',
             'Accept': 'application/json; charset=UTF-8',
-            'VERSION': '2', 
+            'VERSION': '2',
             'X-IG-API-KEY': api_key
         }
         json = {
@@ -74,7 +74,7 @@ class IG_API:
 
         self.acc_info = r.json()
 
-        # log in: reponse 
+        # log in: reponse
         # (response.text or response.json())
         if r.status_code == 200:
             print('----------------------')
@@ -117,7 +117,7 @@ class IG_API:
         """
         Print and return dict (r.json()) of Watchlist.
 
-        ---    
+        ---
         Returns:
             * dict: watchlist
         """
@@ -136,8 +136,8 @@ class IG_API:
 
 
     def get_market_search(
-        self, 
-        searchTerm: str = None, 
+        self,
+        searchTerm: str = None,
         ) -> dict:
         """
         Get list (value of first key) of available assets having match with searchTerm,
@@ -168,10 +168,10 @@ class IG_API:
 
 
     def find_asset_epic_or_info(
-        self, 
-        marketSearchDict: dict, 
-        instrumentName: str, 
-        expiry: str = 'DFB', 
+        self,
+        marketSearchDict: dict,
+        instrumentName: str,
+        expiry: str = 'DFB',
         epic_only: int = 1
         ) -> str:
         """
@@ -185,7 +185,7 @@ class IG_API:
             (i.e. 'GBP/USD' or 'GBP/USD Forward')
             * expiry (str, default='DFB'): either 'DFB' or the expiration date
             (i.e. 'DEC-23' if a Forward etc.)
-            * epic_only (int, default=1): 
+            * epic_only (int, default=1):
                 * 1: return only the epic str
                 * 0: return the info found as a dixt
         ---
@@ -203,7 +203,7 @@ class IG_API:
 
 
     def get_epics(
-        self, 
+        self,
         assets: dict
         ) -> dict:
         """
@@ -224,7 +224,7 @@ class IG_API:
             expiry = d['expiry']
             assets[asset_name]['epic'] = self.find_asset_epic_or_info(
                 self.get_market_search(
-                    asset_name, 
+                    asset_name,
                 ),
                 instrumentName,
                 expiry,
@@ -235,13 +235,13 @@ class IG_API:
 
 
     def get_prices_single_asset(
-        self, 
-        epic: str, 
-        resolution: str, 
-        rangeType: str, 
-        startDate: str = None, 
-        endDate: str = None, 
-        weekdays: tuple[int] = (0, 1, 2, 3, 4, 5, 6), 
+        self,
+        epic: str,
+        resolution: str,
+        rangeType: str,
+        startDate: str = None,
+        endDate: str = None,
+        weekdays: tuple[int] = (0, 1, 2, 3, 4, 5, 6),
         numPoints: int = None
         ) -> tuple:
         """
@@ -279,10 +279,10 @@ class IG_API:
                 * defaults to None
         ---
         Notes to startDate/endDate:
-            * if the time portions are the SAME (00:00:00) then data is fetched using ALL the 24 hours
-            in EVERY single day available ('weekdays' parameter is IGNORED)
-            * if the time portions are DIFFERENT from one another, then the timeInterval and 'weekdays' 
-            parameter is applied 
+            * if the time portions are the SAME (00:00:00) then data is fetched using 
+            ALL the 24 hours in EVERY single day available ('weekdays' parameter is IGNORED)
+            * if the time portions are DIFFERENT from one another, then the timeInterval and 
+            'weekdays' parameter is applied
             * during the timeInterval technique, note that the time rounds DOWNWARDS 
                 * i.e. if getting HOURLY data from 00:00:00-23:59:59 final value would be 23:00:00 
                 instead of: 23:59:59 OR 00:00:00 (which would be midnight the NEXT day, 
@@ -312,7 +312,7 @@ class IG_API:
             url = f'{self.url_base}/prices/{epic}/{resolution}/{numPoints}'
             
             # number of times to loop requests.get for this rangeType method
-            n = 1  
+            n = 1
             
         elif rangeType == 'dates':
             
@@ -359,7 +359,8 @@ class IG_API:
             # prices: GET request
             # every request/loopIteration is 1 call to the API
             # we have limit of max 60 or 30 [unclear] per minute
-            # need to sleep this section so that 1 call takes minimum 1s [for limit of 60 per minute] 
+            # need to sleep this section so that 1 call takes minimum 1s 
+            # [for limit of 60 per minute] 
             # or 2s [for limit of 30 per minute]
             # in reality, so far 3s sleep throws no error, whereas 1s or 2s still gives error
             timerStart = time.time()
@@ -376,8 +377,9 @@ class IG_API:
             
             # if NOT a single API call
             if n != 1:
-                # number of seconds to sleep between each API call to avoid exceeding unknown limit
-                secondsForceSleep = 3.0  
+                # number of seconds to sleep between each API call 
+                # to avoid exceeding unknown limit
+                secondsForceSleep = 3.0
                 
                 # sleep if time taken for request is less than value of secondsForceSleep
                 if timeTaken < secondsForceSleep:
@@ -402,7 +404,7 @@ class IG_API:
             # NOTE: 
             #   res['prices'] is a list
             #   each elem is a different point in times' price info
-            pricesHistorical.extend(res['prices'])   
+            pricesHistorical.extend(res['prices'])
         
         # unpack result
         allowance = res['allowance']
@@ -435,7 +437,7 @@ class IG_API:
                     snapshotTimes.append(pd.to_datetime(t['snapshotTime']))
             
             prices[k] = pd.DataFrame(
-                data=prices[k], 
+                data=prices[k],
                 index=snapshotTimes
             )
             
@@ -463,13 +465,13 @@ class IG_API:
 
 
     def get_prices_all_assets(
-        self, 
-        assets: dict, 
-        resolution: str, 
-        rangeType: str, 
-        startDate: str = None, 
-        endDate: str = None, 
-        weekdays: tuple[int] = (0, 1, 2, 3, 4, 5, 6), 
+        self,
+        assets: dict,
+        resolution: str,
+        rangeType: str,
+        startDate: str = None,
+        endDate: str = None,
+        weekdays: tuple[int] = (0, 1, 2, 3, 4, 5, 6),
         numPoints: int = None
         ) -> tuple[dict]:
         """
@@ -507,10 +509,10 @@ class IG_API:
                 * defaults to None
         ---
         Notes to startDate/endDate:
-            * if the time portions are the SAME (00:00:00) then data is fetched using ALL the 24 hours
-            in EVERY single day available ('weekdays' parameter is IGNORED)
-            * if the time portions are DIFFERENT from one another, then the timeInterval and 'weekdays' 
-            parameter is applied 
+            * if the time portions are the SAME (00:00:00) then data is fetched using 
+            ALL the 24 hours in EVERY single day available ('weekdays' parameter is IGNORED)
+            * if the time portions are DIFFERENT from one another, then the timeInterval and 
+            'weekdays' parameter is applied 
             * during the timeInterval technique, note that the time rounds DOWNWARDS 
                 * i.e. if getting HOURLY data from 00:00:00-23:59:59 final value would be 23:00:00 
                 instead of: 23:59:59 OR 00:00:00 (which would be midnight the NEXT day, 
@@ -536,13 +538,13 @@ class IG_API:
         for asset in assets:
             epic = assets[asset]['epic']
 
-            prices, allowance, instrumentType = self.get_prices_single_asset( 
-                epic, 
-                resolution, 
-                rangeType, 
-                startDate, 
-                endDate, 
-                weekdays, 
+            prices, allowance, instrumentType = self.get_prices_single_asset(
+                epic,
+                resolution,
+                rangeType,
+                startDate,
+                endDate,
+                weekdays,
                 numPoints
             )
 
