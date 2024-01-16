@@ -4,8 +4,8 @@
 # import packages
 # ------------------------------------------------------------------
 import time
-import requests  # noqa
-import pandas as pd  # noqa
+import requests
+import pandas as pd
 
 
 # ------------------------------------------------------------------
