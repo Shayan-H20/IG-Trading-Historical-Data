@@ -1,0 +1,58 @@
+{
+    "prices": [
+        {
+            "snapshotTime": "2024/01/17 10:20:00",
+            "openPrice": {
+                "bid": 12691.0,
+                "ask": 12701.5,
+                "lastTraded": null
+            },
+            "closePrice": {
+                "bid": 12687.3,
+                "ask": 12697.8,
+                "lastTraded": null
+            },
+            "highPrice": {
+                "bid": 12691.3,
+                "ask": 12701.8,
+                "lastTraded": null
+            },
+            "lowPrice": {
+                "bid": 12684.4,
+                "ask": 12694.9,
+                "lastTraded": null
+            },
+            "lastTradedVolume": 431
+        },
+        {
+            "snapshotTime": "2024/01/17 10:25:00",
+            "openPrice": {
+                "bid": 12687.4,
+                "ask": 12697.9,
+                "lastTraded": null
+            },
+            "closePrice": {
+                "bid": 12686.2,
+                "ask": 12696.7,
+                "lastTraded": null
+            },
+            "highPrice": {
+                "bid": 12688.4,
+                "ask": 12698.9,
+                "lastTraded": null
+            },
+            "lowPrice": {
+                "bid": 12685.7,
+                "ask": 12696.2,
+                "lastTraded": null
+            },
+            "lastTradedVolume": 312
+        }
+    ],
+    "instrumentType": "CURRENCIES",
+    "allowance": {
+        "remainingAllowance": 9942,
+        "totalAllowance": 10000,
+        "allowanceExpiry": 424242
+    }
+}
