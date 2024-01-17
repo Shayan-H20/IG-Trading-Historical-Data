@@ -375,15 +375,16 @@ class IG_API:
 
             # early function exit if error
             if r.status_code != 200:
+                print("----------------------")
                 print("ERROR OCCURED")
+                print("----------------------")
                 print(f"STATUS CODE: {r.status_code}")
-                print(r.content)
-                print(res)
+                print()
 
                 # error codes link:
                 # https://labs.ig.com/rest-trading-api-reference/service-detail?id=684
 
-                return res
+                return r.content
 
             # append prices info of each iteration in list container
             # NOTE:
