@@ -1,0 +1,82 @@
+{
+    "prices": [
+        {
+            "snapshotTime": "2024/01/10 10:00:00",
+            "openPrice": {
+                "bid": 12725.8,
+                "ask": 12735.7,
+                "lastTraded": null
+            },
+            "closePrice": {
+                "bid": 12730.7,
+                "ask": 12740.6,
+                "lastTraded": null
+            },
+            "highPrice": {
+                "bid": 12734.2,
+                "ask": 12744.3,
+                "lastTraded": null
+            },
+            "lowPrice": {
+                "bid": 12724.8,
+                "ask": 12734.7,
+                "lastTraded": null
+            },
+            "lastTradedVolume": 742
+        },
+        {
+            "snapshotTime": "2024/01/10 10:15:00",
+            "openPrice": {
+                "bid": 12730.6,
+                "ask": 12740.5,
+                "lastTraded": null
+            },
+            "closePrice": {
+                "bid": 12726.2,
+                "ask": 12736.7,
+                "lastTraded": null
+            },
+            "highPrice": {
+                "bid": 12732.5,
+                "ask": 12742.4,
+                "lastTraded": null
+            },
+            "lowPrice": {
+                "bid": 12725.6,
+                "ask": 12736.1,
+                "lastTraded": null
+            },
+            "lastTradedVolume": 861
+        },
+        {
+            "snapshotTime": "2024/01/10 10:30:00",
+            "openPrice": {
+                "bid": 12726.1,
+                "ask": 12736.6,
+                "lastTraded": null
+            },
+            "closePrice": {
+                "bid": 12720.9,
+                "ask": 12730.8,
+                "lastTraded": null
+            },
+            "highPrice": {
+                "bid": 12726.8,
+                "ask": 12736.8,
+                "lastTraded": null
+            },
+            "lowPrice": {
+                "bid": 12718.6,
+                "ask": 12729.1,
+                "lastTraded": null
+            },
+            "lastTradedVolume": 599
+        }
+    ],
+    "instrumentType": "CURRENCIES",
+    "allowance": {
+        "remainingAllowance": 9942,
+        "totalAllowance": 10000,
+        "allowanceExpiry": 424242
+    }
+}
