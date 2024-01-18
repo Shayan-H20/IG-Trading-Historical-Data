@@ -1,6 +1,5 @@
 import json
 import responses
-import pandas as pd
 import pytest_mock
 
 from ig_trading_historical_data import IG_API
@@ -14,11 +13,11 @@ class TestGetHistoricalPrices:
     @responses.activate
     def test_get_prices_single_asset_num_points(self, mocker):
         """ test getting historical prices using the range_type='num_points' version """
-        
+
         """ mocking the class initialization """
         # create mocked object
         mocked_init = mocker.patch.object(
-            IG_API, 
+            IG_API,
             '__init__',
             return_value=None
         )
@@ -49,8 +48,8 @@ class TestGetHistoricalPrices:
         # run method
         prices, allowance, instrument_type = ig_api.get_prices_single_asset(
             epic='CF.D.GBPUSD.MAR.IP',
-            resolution='MINUTE_5', 
-            range_type='num_points', 
+            resolution='MINUTE_5',
+            range_type='num_points',
             start_date='2024-01-08 10:00:00',  # from Mon
             end_date='2024-01-10 10:30:00',  # until Wed
             weekdays=(0, 2),  # (Mon, Wed)
@@ -72,7 +71,7 @@ class TestGetHistoricalPrices:
         """ mocking the class initialization """
         # create mocked object
         mocked_init = mocker.patch.object(
-            IG_API, 
+            IG_API,
             '__init__',
             return_value=None
         )
@@ -85,7 +84,7 @@ class TestGetHistoricalPrices:
         ig_api.header_base = muid.mock_header_base
 
 
-        """ 
+        """
         test .get_prices_single_asset() using 'dates'
         WITH time interval and WITH specified weekdays
         """
@@ -121,8 +120,8 @@ class TestGetHistoricalPrices:
         # run method
         prices, allowance, instrument_type = ig_api.get_prices_single_asset(
             epic='CF.D.GBPUSD.MAR.IP',
-            resolution='MINUTE_15', 
-            range_type='dates', 
+            resolution='MINUTE_15',
+            range_type='dates',
             start_date='2024-01-08 10:00:00',  # from Mon
             end_date='2024-01-10 10:30:00',  # until Wed
             weekdays=(0, 2),  # (Mon, Wed)
@@ -137,14 +136,14 @@ class TestGetHistoricalPrices:
 
     @responses.activate
     def test_get_prices_single_asset_dates_without_time_interval(self, mocker):
-        """ test getting historical prices using the range_type='dates' version 
+        """ test getting historical prices using the range_type='dates' version
         combined with NOT having a time interval active and NOT having specified weekdays for data gathering
         """
 
         """ mocking the class initialization """
         # create mocked object
         mocked_init = mocker.patch.object(
-            IG_API, 
+            IG_API,
             '__init__',
             return_value=None
         )
@@ -178,8 +177,8 @@ class TestGetHistoricalPrices:
         # run method
         prices, allowance, instrument_type = ig_api.get_prices_single_asset(
             epic='CF.D.GBPUSD.MAR.IP',
-            resolution='HOUR_4', 
-            range_type='dates', 
+            resolution='HOUR_4',
+            range_type='dates',
             start_date='2024-01-08 00:00:00',  # from Mon
             end_date='2024-01-10 00:00:00',  # until Wed
             weekdays=(0, 2),  # (Mon, Wed)
